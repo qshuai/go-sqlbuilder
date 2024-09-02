@@ -320,3 +320,56 @@ func (c *Cond) Some(field, op string, value ...interface{}) string {
 func (c *Cond) Var(value interface{}) string {
 	return c.Args.Add(value)
 }
+
+func (c *Cond) MatchAll(field string, value interface{}) string {
+	buf := newStringBuilder()
+	buf.WriteString(Escape(field))
+	buf.WriteString(" MATCH_ALL ")
+	buf.WriteString("'")
+	buf.WriteString(c.Args.Add(value))
+	buf.WriteString("'")
+	return buf.String()
+}
+
+func (c *Cond) MatchAny(field string, value interface{}) string {
+	buf := newStringBuilder()
+	buf.WriteString(Escape(field))
+	buf.WriteString(" MATCH_ANY ")
+	buf.WriteString("'")
+	buf.WriteString(c.Args.Add(value))
+	buf.WriteString("'")
+	return buf.String()
+}
+
+func (c *Cond) MatchPhrase(field, slop string, value interface{}) string {
+	buf := newStringBuilder()
+	buf.WriteString(Escape(field))
+	buf.WriteString(" MATCH_PHRASE ")
+	buf.WriteString("'")
+	buf.WriteString(c.Args.Add(value))
+	if slop != "" {
+		buf.WriteString(" " + slop)
+	}
+	buf.WriteString("'")
+	return buf.String()
+}
+
+func (c *Cond) MatchPhrasePrefix(field string, value interface{}) string {
+	buf := newStringBuilder()
+	buf.WriteString(Escape(field))
+	buf.WriteString(" MATCH_PHRASE_PREFIX ")
+	buf.WriteString("'")
+	buf.WriteString(c.Args.Add(value))
+	buf.WriteString("'")
+	return buf.String()
+}
+
+func (c *Cond) MatchRegexp(field string, value interface{}) string {
+	buf := newStringBuilder()
+	buf.WriteString(Escape(field))
+	buf.WriteString(" MATCH_REGEXP ")
+	buf.WriteString("'")
+	buf.WriteString(c.Args.Add(value))
+	buf.WriteString("'")
+	return buf.String()
+}
